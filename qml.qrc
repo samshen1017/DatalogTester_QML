@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Image/busy_dark.png</file>
+        <file>QML/Characteristics.qml</file>
+        <file>QML/SDialog.qml</file>
+        <file>QML/Header.qml</file>
+        <file>QML/SLabel.qml</file>
+        <file>QML/SMenu.qml</file>
+        <file>QML/Services.qml</file>
+        <file>QML/ScanPage.qml</file>
+        <file>QML/DevicePage.qml</file>
+    </qresource>
+    <qresource prefix="/Img"/>
+</RCC>
