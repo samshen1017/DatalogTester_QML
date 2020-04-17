@@ -5,7 +5,6 @@ Rectangle {
     id: devicePage
     width: 300
     height: 600
-    property  string sendString: ""
     Header {
         id: header
         anchors.top: parent.top
@@ -15,7 +14,7 @@ Rectangle {
     Connections{
         target: pb
         onMsgChanged:{
-            console.debug("onMsgChanged" + pb.ProtocMsg);
+            ble.sendMsg(pb.ProtocMsg)
         }
     }
 

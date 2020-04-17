@@ -100,7 +100,7 @@ public slots:
     void connectToService(const QString &uuid);
     void disconnectFromDevice();
 
-    void sendMeg(QString msg);
+    void sendMsg(const QString &msg);
 
 private slots:
     // QBluetoothDeviceDiscoveryAgent related

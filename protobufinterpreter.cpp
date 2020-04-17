@@ -10,7 +10,13 @@ ProtobufInterpreter::ProtobufInterpreter(QObject *parent) : QObject(parent)
 
 void ProtobufInterpreter::syncTime(void)
 {
-    setProtocMsg("HelloWorld!");
+    QString msg;
+    msg.append(0xFE);
+    msg.append(0x01);
+    msg.append(0x00);
+    msg.append(0x0D);
+    msg.append(0x0A);
+    setProtocMsg(msg);
 }
 
 QString ProtobufInterpreter::getProtocMsg()

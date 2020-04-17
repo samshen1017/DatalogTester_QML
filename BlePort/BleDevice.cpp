@@ -61,6 +61,11 @@
 #include <QMetaEnum>
 #include <QTimer>
 
+#define SERV_UUID "0000f101-0001-0001-0001-03ff00000001"
+#define CHAR_W_UUID "0000f102-0001-0001-0001-03ff00000001"
+#define CHAR_R_UUID "0000f103-0001-0001-0001-03ff00000001"
+
+
 BleDevice::BleDevice()
 {
     //! [les-devicediscovery-1]
@@ -316,9 +321,27 @@ void BleDevice::disconnectFromDevice()
         deviceDisconnected();
 }
 
-void BleDevice::sendMeg(QString msg)
+void BleDevice::sendMsg(const QString &msg)
 {
-    QListIterator<QObject *> i(m_services);
+    //0000f101-0001-0001-0001-03ff00000001
+    QList<QObject *>::ConstIterator serv_i;
+    for(serv_i = m_services.begin(); serv_i!=m_services.end(); ++serv_i){
+        ServiceInfo *servInfo = static_cast<ServiceInfo *>(*serv_i);
+        if(servInfo->getUuid() == SERV_UUID)
+        {
+            QLowEnergyService *service = servInfo->service();
+            QList<QObject *>::ConstIterator char_i;
+            for(char_i = m_characteristics.begin(); char_i!= m_characteristics.end(); ++char_i)
+            {
+                CharacteristicInfo *charInfo = static_cast<CharacteristicInfo *>(*char_i);
+                if(charInfo->getUuid() == CHAR_W_UUID)
+                {
+                    QLowEnergyCharacteristic char_write = charInfo->getCharacteristic();
+                    service->writeCharacteristic(char_write, msg.toLatin1(), QLowEnergyService::WriteWithResponse);
+                }
+            }
+        }
+    }
 }
 
 void BleDevice::deviceDisconnected()
