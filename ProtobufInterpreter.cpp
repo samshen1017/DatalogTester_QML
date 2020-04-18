@@ -1,12 +1,10 @@
-#include "protobufinterpreter.h"
+#include "ProtobufInterpreter.h"
 #include "protocols/DLF.pb.h"
 #include <QDebug>
-
 
 ProtobufInterpreter::ProtobufInterpreter(QObject *parent) : QObject(parent)
 {
 }
-
 
 void ProtobufInterpreter::syncTime(void)
 {

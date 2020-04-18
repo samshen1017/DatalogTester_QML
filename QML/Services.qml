@@ -148,7 +148,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         menuWidth: parent.width
         menuText: ble.update
-        menuHeight: (parent.height/6)
+        menuHeight: (parent.height/8)
         onButtonClick: {
             ble.disconnectFromDevice()
             pageLoader.source = "ScanPage.qml"

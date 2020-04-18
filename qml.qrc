@@ -10,6 +10,9 @@
         <file>QML/Services.qml</file>
         <file>QML/ScanPage.qml</file>
         <file>QML/DevicePage.qml</file>
+        <file>QML/TaskPage.qml</file>
+        <file>QML/SensorPage.qml</file>
+        <file>QML/HistoryPage.qml</file>
     </qresource>
     <qresource prefix="/Img"/>
 </RCC>

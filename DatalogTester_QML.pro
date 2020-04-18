@@ -19,7 +19,7 @@ SOURCES += \
         BlePort/deviceinfo.cpp \
         BlePort/serviceinfo.cpp \
         main.cpp \
-        protobufinterpreter.cpp \
+        ProtobufInterpreter.cpp \
         protocols/DLF.pb.cc \
         protocols/Device.pb.cc \
         protocols/History.pb.cc \
@@ -45,7 +45,7 @@ HEADERS += \
     BlePort/characteristicinfo.h \
     BlePort/deviceinfo.h \
     BlePort/serviceinfo.h \
-    protobufinterpreter.h \
+    ProtobufInterpreter.h \
     protocols/DLF.pb.h \
     protocols/Device.pb.h \
     protocols/History.pb.h \

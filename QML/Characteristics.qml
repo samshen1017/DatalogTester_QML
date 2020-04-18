@@ -83,7 +83,7 @@ Rectangle {
         }
 
         onDisconnected: {
-            pageLoader.source = "main.qml"
+            pageLoader.source = "ScanPage.qml"
         }
     }
 
@@ -93,17 +93,20 @@ Rectangle {
         clip: true
 
         anchors.top: header.bottom
-        anchors.bottom: menu.top
+        anchors.bottom: btn_DevPage.top
         model: ble.characteristicList
 
         delegate: Rectangle {
             id: characteristicbox
-            height:300
+            height:150
             width: parent.width
             color: "lightsteelblue"
             border.width: 2
             border.color: "black"
             radius: 5
+            Component.onCompleted: {
+                info.visible = false
+            }
 
             SLabel {
                 id: characteristicName
@@ -148,14 +151,49 @@ Rectangle {
         }
     }
 
+
+
     SMenu {
         id: btn_DevPage
-        anchors.bottom: menu.top
+        anchors.bottom: btn_SensorPage.top
         menuWidth: parent.width
-        menuText: "DeviceInfo"
-        menuHeight: (parent.height/6)
+        menuText: "Device"
+        menuHeight: (parent.height/8)
         onButtonClick: {
             pageLoader.source = "DevicePage.qml"
+        }
+    }
+
+    SMenu {
+        id: btn_SensorPage
+        anchors.bottom: btn_TaskPage.top
+        menuWidth: parent.width
+        menuText: "Sensor"
+        menuHeight: (parent.height/8)
+        onButtonClick: {
+            pageLoader.source = "SensorPage.qml"
+        }
+    }
+
+    SMenu {
+        id: btn_TaskPage
+        anchors.bottom: btn_HistoryPage.top
+        menuWidth: parent.width
+        menuText: "Task"
+        menuHeight: (parent.height/8)
+        onButtonClick: {
+            pageLoader.source = "TaskPage.qml"
+        }
+    }
+
+    SMenu {
+        id: btn_HistoryPage
+        anchors.bottom: menu.top
+        menuWidth: parent.width
+        menuText: "History"
+        menuHeight: (parent.height/8)
+        onButtonClick: {
+            pageLoader.source = "HistoryPage.qml"
         }
     }
 
@@ -164,7 +202,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         menuWidth: parent.width
         menuText: ble.update
-        menuHeight: (parent.height/6)
+        menuHeight: (parent.height/8)
         onButtonClick: {
             pageLoader.source = "Services.qml"
             ble.update = "Back"

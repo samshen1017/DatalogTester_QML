@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "BlePort/BleDevice.h"
-#include "protobufinterpreter.h"
+#include "ProtobufInterpreter.h"
 
 int main(int argc, char *argv[])
 {

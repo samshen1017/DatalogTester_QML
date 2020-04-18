@@ -2,40 +2,39 @@ import QtQuick 2.12
 import QtQuick.Controls 2.2
 
 Rectangle {
-    id: devicePage
+    id:taskPage
     width: 300
     height: 600
     Header {
         id: header
         anchors.top: parent.top
-        headerText: "Device"
+        headerText: "Task"
     }
 
-    Connections{
-        target: pb
-        onMsgChanged:{
-            ble.sendMsg(pb.ProtocMsg)
-        }
+    SLabel{
+        id: tasks
+        textContent: "Task List"
+        anchors.top: header.bottom
     }
 
     SMenu {
-        id: getDev
-        anchors.bottom: syncTime.top
+        id: updateTasks
+        anchors.bottom: newTask.top
         menuWidth: parent.width
         menuHeight: (parent.height/8)
-        menuText: "GetDeviceInfo"
+        menuText: "update Tasks"
         onButtonClick: {
 
         }
     }
     SMenu {
-        id: syncTime
+        id: newTask
         anchors.bottom: menu.top
         menuWidth: parent.width
         menuHeight: (parent.height/8)
-        menuText: "SyncTime"
+        menuText: "New Task"
         onButtonClick: {
-            pb.syncTime()
+
         }
     }
 

@@ -112,6 +112,7 @@ private slots:
     void addLowEnergyService(const QBluetoothUuid &uuid);
     void deviceConnected();
     void errorReceived(QLowEnergyController::Error);
+    void msgReceived(const QLowEnergyCharacteristic &info, const QByteArray &value);
     void serviceScanDone();
     void deviceDisconnected();
 

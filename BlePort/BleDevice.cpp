@@ -63,7 +63,7 @@
 
 #define SERV_UUID "0000f101-0001-0001-0001-03ff00000001"
 #define CHAR_W_UUID "0000f102-0001-0001-0001-03ff00000001"
-#define CHAR_R_UUID "0000f103-0001-0001-0001-03ff00000001"
+#define CHAR_N_UUID "0000f103-0001-0001-0001-03ff00000001"
 
 
 BleDevice::BleDevice()
@@ -271,6 +271,9 @@ void BleDevice::connectToService(const QString &uuid)
         //! [les-service-3]
         connect(service, &QLowEnergyService::stateChanged,
                 this, &BleDevice::serviceDetailsDiscovered);
+        connect(service, &QLowEnergyService::characteristicChanged,
+                this, &BleDevice::msgReceived);
+
         service->discoverDetails();
         setUpdate("Back\n(Discovering details...)");
         //! [les-service-3]
@@ -300,6 +303,13 @@ void BleDevice::errorReceived(QLowEnergyController::Error /*error*/)
 {
     qWarning() << "Error: " << controller->errorString();
     setUpdate(QString("Back\n(%1)").arg(controller->errorString()));
+}
+
+void BleDevice::msgReceived(const QLowEnergyCharacteristic &info, const QByteArray &value)
+{
+    qDebug() << "characteristicChanged state change::" <<info.uuid();
+    qDebug() << "value length:" << value.length();
+    qDebug() << "value :" << value;
 }
 
 void BleDevice::setUpdate(const QString &message)

@@ -1,0 +1,25 @@
+import QtQuick 2.12
+import QtQuick.Controls 2.2
+
+Rectangle {
+    id: sensorPage
+    width: 300
+    height: 600
+    Header {
+        id: header
+        anchors.top: parent.top
+        headerText: "Sensor"
+    }
+
+    SMenu {
+        id: menu
+        anchors.bottom: parent.bottom
+        menuWidth: parent.width
+        menuHeight: (parent.height/8)
+        menuText: "Back"
+        onButtonClick: {
+            pageLoader.source = "Characteristics.qml"
+            ble.update = "Back"
+        }
+    }
+}
