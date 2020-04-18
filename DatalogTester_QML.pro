@@ -25,7 +25,8 @@ SOURCES += \
         protocols/History.pb.cc \
         protocols/Modbus.pb.cc \
         protocols/Sensor.pb.cc \
-        protocols/Task.pb.cc
+        protocols/Task.pb.cc \
+        tools/mbcrc.c
 
 RESOURCES += qml.qrc
 
@@ -51,7 +52,8 @@ HEADERS += \
     protocols/History.pb.h \
     protocols/Modbus.pb.h \
     protocols/Sensor.pb.h \
-    protocols/Task.pb.h
+    protocols/Task.pb.h \
+    tools/mbcrc.h
 
 INCLUDEPATH += protocols/libpb3.3.0/include
 

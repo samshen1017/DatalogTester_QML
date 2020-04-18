@@ -17,7 +17,12 @@ Rectangle {
             ble.sendMsg(pb.ProtocMsg)
         }
     }
-
+    Connections{
+        target: ble
+        onMsgReceived: {
+            console.debug(ble.msg);
+        }
+    }
     SMenu {
         id: getDev
         anchors.bottom: syncTime.top

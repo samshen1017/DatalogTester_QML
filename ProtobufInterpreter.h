@@ -6,11 +6,11 @@
 class ProtobufInterpreter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString ProtocMsg READ getProtocMsg WRITE setProtocMsg NOTIFY msgChanged)
+    Q_PROPERTY(QByteArray ProtocMsg READ getProtocMsg WRITE setProtocMsg NOTIFY msgChanged)
 
 public:
     explicit ProtobufInterpreter(QObject *parent = nullptr);
-    QString getProtocMsg();
+    QByteArray getProtocMsg();
 
 public slots:
     void syncTime(void);
@@ -19,8 +19,9 @@ signals:
     void msgChanged();
 
 private:
-    QString m_message;
-    void setProtocMsg(const QString &message);
+    QByteArray m_message;
+    QByteArray createMsg(const std::string &s);
+    void setProtocMsg(const QByteArray &message);
 };
 
 #endif // PROTOBUFINTERPRETER_H

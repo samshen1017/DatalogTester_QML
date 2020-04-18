@@ -163,6 +163,11 @@ int BleDevice::getRssiFilter()
     return m_rssiFilter;
 }
 
+QByteArray BleDevice::getMsg()
+{
+    return m_msgArray;
+}
+
 void BleDevice::scanServices(const QString &address)
 {
     // We need the current device for service discovery.
@@ -272,7 +277,7 @@ void BleDevice::connectToService(const QString &uuid)
         connect(service, &QLowEnergyService::stateChanged,
                 this, &BleDevice::serviceDetailsDiscovered);
         connect(service, &QLowEnergyService::characteristicChanged,
-                this, &BleDevice::msgReceived);
+                this, &BleDevice::msgReceivedHandle);
 
         service->discoverDetails();
         setUpdate("Back\n(Discovering details...)");
@@ -305,13 +310,6 @@ void BleDevice::errorReceived(QLowEnergyController::Error /*error*/)
     setUpdate(QString("Back\n(%1)").arg(controller->errorString()));
 }
 
-void BleDevice::msgReceived(const QLowEnergyCharacteristic &info, const QByteArray &value)
-{
-    qDebug() << "characteristicChanged state change::" <<info.uuid();
-    qDebug() << "value length:" << value.length();
-    qDebug() << "value :" << value;
-}
-
 void BleDevice::setUpdate(const QString &message)
 {
     m_message = message;
@@ -331,8 +329,18 @@ void BleDevice::disconnectFromDevice()
         deviceDisconnected();
 }
 
-void BleDevice::sendMsg(const QString &msg)
+void BleDevice::msgReceivedHandle(const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
+    qDebug() << "characteristicChanged state change::" <<info.uuid();
+    qDebug() << "value length:" << value.length();
+    qDebug() << "value :" << value;
+    m_msgArray = "--------  HelloWorld  --------";
+    emit msgReceived();
+}
+
+void BleDevice::sendMsg(const QByteArray &msg)
+{
+    qDebug()<<"Send:"<<hex<<msg;
     //0000f101-0001-0001-0001-03ff00000001
     QList<QObject *>::ConstIterator serv_i;
     for(serv_i = m_services.begin(); serv_i!=m_services.end(); ++serv_i){
@@ -347,7 +355,7 @@ void BleDevice::sendMsg(const QString &msg)
                 if(charInfo->getUuid() == CHAR_W_UUID)
                 {
                     QLowEnergyCharacteristic char_write = charInfo->getCharacteristic();
-                    service->writeCharacteristic(char_write, msg.toLatin1(), QLowEnergyService::WriteWithResponse);
+                    service->writeCharacteristic(char_write, msg, QLowEnergyService::WriteWithResponse);
                 }
             }
         }

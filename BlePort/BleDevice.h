@@ -77,7 +77,7 @@ class BleDevice: public QObject
     Q_PROPERTY(bool state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool controllerError READ hasControllerError)
     Q_PROPERTY(int rssiFilter READ getRssiFilter WRITE setRssiFilter)
-
+    Q_PROPERTY(QByteArray msg READ getMsg NOTIFY msgReceived)
 public:
     BleDevice();
     ~BleDevice();
@@ -86,6 +86,7 @@ public:
     QVariant getCharacteristics();
     QString getUpdate();
     int getRssiFilter();
+    QByteArray getMsg();
     bool state();
     bool hasControllerError() const;
 
@@ -100,7 +101,7 @@ public slots:
     void connectToService(const QString &uuid);
     void disconnectFromDevice();
 
-    void sendMsg(const QString &msg);
+    void sendMsg(const QByteArray &msg);
 
 private slots:
     // QBluetoothDeviceDiscoveryAgent related
@@ -112,7 +113,7 @@ private slots:
     void addLowEnergyService(const QBluetoothUuid &uuid);
     void deviceConnected();
     void errorReceived(QLowEnergyController::Error);
-    void msgReceived(const QLowEnergyCharacteristic &info, const QByteArray &value);
+    void msgReceivedHandle(const QLowEnergyCharacteristic &info, const QByteArray &value);
     void serviceScanDone();
     void deviceDisconnected();
 
@@ -127,6 +128,7 @@ Q_SIGNALS:
     void stateChanged();
     void disconnected();
     void randomAddressChanged();
+    void msgReceived();
 
 private:
     void setUpdate(const QString &message);
@@ -137,6 +139,7 @@ private:
     QList<QObject *> m_characteristics;
     QString m_previousAddress;
     QString m_message;
+    QByteArray m_msgArray;
     int m_rssiFilter = -100;
     bool connected = false;
     QLowEnergyController *controller = nullptr;
