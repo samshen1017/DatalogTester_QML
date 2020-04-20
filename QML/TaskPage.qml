@@ -18,26 +18,37 @@ Rectangle {
     }
 
     SMenu {
-        id: updateTasks
-        anchors.bottom: newTask.top
-        menuWidth: parent.width
+        id: newTask
+        anchors.bottom: menu.top
+        menuWidth: delTask.width
         menuHeight: (parent.height/10)
-        menuText: "update Tasks"
+        menuText: "NewTask"
         onButtonClick: {
 
         }
     }
+
     SMenu {
-        id: newTask
+        id: delTask
+        anchors.bottom: updateTasks.top
+        menuWidth: parent.width
+        menuHeight: (parent.height/10)
+        menuText: "DelTask"
+        onButtonClick: {
+
+        }
+    }
+
+    SMenu {
+        id: updateTasks
         anchors.bottom: menu.top
         menuWidth: parent.width
         menuHeight: (parent.height/10)
-        menuText: "New Task"
+        menuText: "updateTasks"
         onButtonClick: {
 
         }
     }
-
     SMenu {
         id: menu
         anchors.bottom: parent.bottom

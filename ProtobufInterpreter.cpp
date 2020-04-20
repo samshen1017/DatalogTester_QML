@@ -116,6 +116,30 @@ void ProtobufInterpreter::devInfo(void)
     qDebug()<<"GetDevInfo";
 }
 
+void ProtobufInterpreter::updateDevInfo(void)
+{
+    SH3H_Request req;
+    std::string pb_str;
+    DeviceInfo info;
+    info.set_devicenumber("06001456");
+    info.set_majorversion("Test123");
+    info.set_minorversion("Test456");
+    info.set_serialnumber("1024");
+
+    info.set_lang(English);
+    info.set_latitude(123.1);
+    info.set_timezone(-2);
+    info.set_sleeptime(111);
+    info.set_longitude(0);
+
+    req.set_type(Req_UpdateDeviceInfo);
+    req.set_allocated_devinfo(&info);
+    req.SerializeToString(&pb_str);
+    QByteArray msg = createMsg(pb_str);
+    setProtocMsg(msg);
+    qDebug()<<"UpdateDevInfo";
+}
+
 QByteArray ProtobufInterpreter::getProtocMsg()
 {
     return m_message;

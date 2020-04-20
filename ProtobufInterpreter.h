@@ -17,6 +17,7 @@ public slots:
     void heartBeat(void);
     void syncTime(void);
     void devInfo(void);
+    void updateDevInfo(void);
 
 signals:
     void msgChanged();

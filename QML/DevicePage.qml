@@ -27,12 +27,23 @@ Rectangle {
 
     SMenu {
         id: heartbeat
-        anchors.bottom: getDev.top
+        anchors.bottom: setDev.top
         menuWidth: parent.width
         menuHeight: (parent.height/10)
         menuText: "HeartBeat"
         onButtonClick: {
             pb.heartBeat()
+        }
+    }
+
+    SMenu {
+        id: setDev
+        anchors.bottom: getDev.top
+        menuWidth: parent.width
+        menuHeight: (parent.height/10)
+        menuText: "updateDeviceInfo"
+        onButtonClick: {
+            pb.updateDevInfo()
         }
     }
 
