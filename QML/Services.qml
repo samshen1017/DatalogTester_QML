@@ -115,8 +115,9 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    pageLoader.source = "Characteristics.qml";
+                    console.debug("connectToService: " + modelData.serviceUuid);
                     ble.connectToService(modelData.serviceUuid);
+                    pageLoader.source = "Characteristics.qml";
                 }
             }
 
@@ -148,7 +149,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         menuWidth: parent.width
         menuText: ble.update
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             ble.disconnectFromDevice()
             pageLoader.source = "ScanPage.qml"

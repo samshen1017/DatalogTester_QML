@@ -11,9 +11,12 @@ class ProtobufInterpreter : public QObject
 public:
     explicit ProtobufInterpreter(QObject *parent = nullptr);
     QByteArray getProtocMsg();
+    QByteArray parseMsg(const QByteArray &amessage);
 
 public slots:
+    void heartBeat(void);
     void syncTime(void);
+    void devInfo(void);
 
 signals:
     void msgChanged();
@@ -22,6 +25,11 @@ private:
     QByteArray m_message;
     QByteArray createMsg(const std::string &s);
     void setProtocMsg(const QByteArray &message);
+    bool checkProtobuf(const QByteArray &message);
+//    bool checkHead(const QByteArray &message);
+//    bool checkVersion(const QByteArray &message);
+//    bool checkLength(const QByteArray &message);
+//    bool checkCRC(const QByteArray &message);
 };
 
 #endif // PROTOBUFINTERPRETER_H

@@ -11,33 +11,47 @@ Rectangle {
         headerText: "Device"
     }
 
+    SLabel{
+        id: devInfo
+        anchors.top: header.bottom
+        anchors.topMargin: 5
+        textContent:ble.msg
+    }
+
     Connections{
         target: pb
         onMsgChanged:{
             ble.sendMsg(pb.ProtocMsg)
         }
     }
-    Connections{
-        target: ble
-        onMsgReceived: {
-            console.debug(ble.msg);
+
+    SMenu {
+        id: heartbeat
+        anchors.bottom: getDev.top
+        menuWidth: parent.width
+        menuHeight: (parent.height/10)
+        menuText: "HeartBeat"
+        onButtonClick: {
+            pb.heartBeat()
         }
     }
+
     SMenu {
         id: getDev
         anchors.bottom: syncTime.top
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "GetDeviceInfo"
         onButtonClick: {
-
+            pb.devInfo()
         }
     }
+
     SMenu {
         id: syncTime
         anchors.bottom: menu.top
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "SyncTime"
         onButtonClick: {
             pb.syncTime()
@@ -48,7 +62,7 @@ Rectangle {
         id: menu
         anchors.bottom: parent.bottom
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "Back"
         onButtonClick: {
             pageLoader.source = "Characteristics.qml"

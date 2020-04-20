@@ -290,9 +290,19 @@ void BleDevice::connectToService(const QString &uuid)
     for (const QLowEnergyCharacteristic &ch : chars) {
         auto cInfo = new CharacteristicInfo(ch);
         m_characteristics.append(cInfo);
+        if(cInfo->getUuid() == CHAR_N_UUID){
+            QLowEnergyCharacteristic char_notify = cInfo->getCharacteristic();
+            openNotify(service, char_notify);
+        }
     }
-
     QTimer::singleShot(0, this, &BleDevice::characteristicsUpdated);
+}
+
+void BleDevice::openNotify(QLowEnergyService *service, const QLowEnergyCharacteristic &ch)
+{
+    Q_ASSERT(service !=nullptr);
+    QLowEnergyDescriptor desc = ch.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+    service->writeDescriptor(desc, QByteArray::fromHex("0100"));
 }
 
 void BleDevice::deviceConnected()
@@ -328,14 +338,32 @@ void BleDevice::disconnectFromDevice()
     else
         deviceDisconnected();
 }
-
+#include <ProtobufInterpreter.h>
+static QByteArray msgBuffer;
 void BleDevice::msgReceivedHandle(const QLowEnergyCharacteristic &info, const QByteArray &value)
 {
-    qDebug() << "characteristicChanged state change::" <<info.uuid();
-    qDebug() << "value length:" << value.length();
-    qDebug() << "value :" << value;
-    m_msgArray = "--------  HelloWorld  --------";
-    emit msgReceived();
+    qDebug()<<"======== msgReceivedHandle ========";
+
+    QByteArray tail;
+    tail.append(0x0D);
+    tail.append(0x0A);
+
+    if((value.at(0) == 0xFE) && msgBuffer.isEmpty())
+    {
+        msgBuffer.append(value);
+    }
+    else if(value.endsWith(tail) && !msgBuffer.isEmpty())
+    {
+        ProtobufInterpreter m_pb;
+        msgBuffer.append(value);
+        m_msgArray = m_pb.parseMsg(msgBuffer);
+        emit msgReceived();
+        msgBuffer.clear();
+    }
+    else if(!msgBuffer.isEmpty())
+    {
+        msgBuffer.append(value);
+    }
 }
 
 void BleDevice::sendMsg(const QByteArray &msg)
@@ -393,6 +421,10 @@ void BleDevice::serviceDetailsDiscovered(QLowEnergyService::ServiceState newStat
     for (const QLowEnergyCharacteristic &ch : chars) {
         auto cInfo = new CharacteristicInfo(ch);
         m_characteristics.append(cInfo);
+        if(cInfo->getUuid() == CHAR_N_UUID){
+            QLowEnergyCharacteristic char_notify = cInfo->getCharacteristic();
+            openNotify(service, char_notify);
+        }
     }
     //! [les-chars]
 

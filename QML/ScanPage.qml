@@ -169,7 +169,7 @@ Rectangle {
         id: menu
         anchors.bottom: parent.bottom
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: ble.update
         onButtonClick: {
             ble.startDeviceDiscovery();

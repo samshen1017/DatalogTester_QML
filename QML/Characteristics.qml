@@ -158,7 +158,7 @@ Rectangle {
         anchors.bottom: btn_SensorPage.top
         menuWidth: parent.width
         menuText: "Device"
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             pageLoader.source = "DevicePage.qml"
         }
@@ -169,7 +169,7 @@ Rectangle {
         anchors.bottom: btn_TaskPage.top
         menuWidth: parent.width
         menuText: "Sensor"
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             pageLoader.source = "SensorPage.qml"
         }
@@ -180,7 +180,7 @@ Rectangle {
         anchors.bottom: btn_HistoryPage.top
         menuWidth: parent.width
         menuText: "Task"
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             pageLoader.source = "TaskPage.qml"
         }
@@ -191,7 +191,7 @@ Rectangle {
         anchors.bottom: menu.top
         menuWidth: parent.width
         menuText: "History"
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             pageLoader.source = "HistoryPage.qml"
         }
@@ -202,7 +202,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         menuWidth: parent.width
         menuText: ble.update
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         onButtonClick: {
             pageLoader.source = "Services.qml"
             ble.update = "Back"

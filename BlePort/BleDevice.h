@@ -132,6 +132,7 @@ Q_SIGNALS:
 
 private:
     void setUpdate(const QString &message);
+    void openNotify(QLowEnergyService *service, const QLowEnergyCharacteristic &ch);
     QBluetoothDeviceDiscoveryAgent *discoveryAgent;
     DeviceInfo currentDevice;
     QList<QObject *> devices;

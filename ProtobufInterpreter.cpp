@@ -29,7 +29,7 @@ QByteArray ProtobufInterpreter::createMsg(const std::string &s)
     quint32 pb_len = s.length();
     head.append(PROTOC_MAGIC_NUMBER);
     head.append(PROTOC_PB_VER);
-    quint16 tmp = pb_len + 3;
+    quint16 tmp = convertToLSB_ByShort(pb_len + 3);
     head.append((char *)&tmp, 2);
     array.append(PROTOC_PB_CMD);
     array.append(QByteArray::fromStdString(s));
@@ -41,7 +41,56 @@ QByteArray ProtobufInterpreter::createMsg(const std::string &s)
     return array;
 }
 
+QByteArray ProtobufInterpreter::parseMsg(const QByteArray &message)
+{
+    qDebug()<<"======== parseMsg ========";
+    qDebug()<<message;
+    if(!checkProtobuf(message)){
+        qDebug()<<message;
+        return "checkpackage false.";
+    }
+    QByteArray pb_str = message.mid(5, message.length() - 9);
+    std::string str = pb_str.toStdString();
+    SH3H_Response resp;
+    if(resp.ParseFromString(str))
+    {
+        switch(resp.type()){
+        case Resp_HeartBeat:
+        {
+            return QByteArray::number(resp.beatcount());
+        }
+        case Resp_OK:
+            return "OK.";
+        case Resp_Error:
+            return "Error.";
+        case Resp_DeviceInfo:
+        {
+            if(resp.has_devinfo())
+            {
+                DeviceInfo info = resp.devinfo();
+                std::string info_str =info.DebugString();
+                return QByteArray::fromStdString(info_str);
+            }else{
+                return "Protobuf missing DeviceInfo.";
+            }
+        }
+        default:
+            break;
+        }
+    }
+    return "protobuf parse fault.";
+}
 
+void ProtobufInterpreter::heartBeat(void)
+{
+    SH3H_Request req;
+    std::string pb_str;
+    req.set_type(Req_HeartBeat);
+    req.SerializeToString(&pb_str);
+    QByteArray msg = createMsg(pb_str);
+    setProtocMsg(msg);
+    qDebug()<<"heart beat";
+}
 
 void ProtobufInterpreter::syncTime(void)
 {
@@ -50,10 +99,21 @@ void ProtobufInterpreter::syncTime(void)
     std::string pb_str;
     req.set_type(Req_SyncTime);
     req.set_currenttime(now);
-    qDebug()<<"sync time:"<<now;
     req.SerializeToString(&pb_str);
     QByteArray msg = createMsg(pb_str);
     setProtocMsg(msg);
+    qDebug()<<"sync time:"<<now;
+}
+
+void ProtobufInterpreter::devInfo(void)
+{
+    SH3H_Request req;
+    std::string pb_str;
+    req.set_type(Req_DeviceInfo);
+    req.SerializeToString(&pb_str);
+    QByteArray msg = createMsg(pb_str);
+    setProtocMsg(msg);
+    qDebug()<<"GetDevInfo";
 }
 
 QByteArray ProtobufInterpreter::getProtocMsg()
@@ -65,4 +125,32 @@ void ProtobufInterpreter::setProtocMsg(const QByteArray &message)
 {
     m_message = message;
     emit msgChanged();
+}
+
+bool ProtobufInterpreter::checkProtobuf(const QByteArray &message)
+{
+
+    const char *str = message.data();
+    if(str[0] == 0xFE){  // check head
+        if(0x01 == str[1]){ //check version
+            quint16 length = *(quint16 *)(str + 2);
+            if(length == (message.length() - 6)){ // check length
+                quint16 calc_crc = usMBCRC16((UCHAR *)str + 4, length - 2);
+                quint16 cur_crc =  convertToLSB_ByShort(*(quint16 *)(str + (message.length() - 4)));
+                if(calc_crc == cur_crc){ //check crc
+                    return true;
+                }else{
+                    qDebug()<<"check crc failed.";
+                }
+            }else{
+                qDebug()<<"check length failed.";
+            }
+        }else{
+            qDebug()<<"check version failed.";
+        }
+    }else
+    {
+        qDebug()<<"check head failed.";
+    }
+    return false;
 }

@@ -21,7 +21,7 @@ Rectangle {
         id: updateTasks
         anchors.bottom: newTask.top
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "update Tasks"
         onButtonClick: {
 
@@ -31,7 +31,7 @@ Rectangle {
         id: newTask
         anchors.bottom: menu.top
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "New Task"
         onButtonClick: {
 
@@ -42,7 +42,7 @@ Rectangle {
         id: menu
         anchors.bottom: parent.bottom
         menuWidth: parent.width
-        menuHeight: (parent.height/8)
+        menuHeight: (parent.height/10)
         menuText: "Back"
         onButtonClick: {
             pageLoader.source = "Characteristics.qml"
